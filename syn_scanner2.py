@@ -11,7 +11,7 @@ print(logo.renderText('PortScanner'))
 
 def _argparse():
     parser = argparse.ArgumentParser(description="Python SYN 端口扫描")
-    parser.add_argument('-h', '--host', action='store', dest='host', help="目标主机IP ")
+    parser.add_argument('-i', '--ip', action='store', dest='host', help="目标主机IP ")
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit()
@@ -31,7 +31,6 @@ def checkhost(ip):
 def checkport(ip, port):
     tcp_request = IP(dst=ip)/TCP(dport=port, flags="S")
     tcp_response = sr1(tcp_request, timeout=1, verbose=0)
-    print(tcp_response.getlayer(TCP))
     try:
         if tcp_response.getlayer(TCP).flags == "SA":
             print(port, "is listening")

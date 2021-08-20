@@ -8,6 +8,8 @@ import sys
 import argparse
 import queue
 import time
+import random
+
 
 # 端口扫描类，继承threading.Thread
 class PortScanner(threading.Thread):
@@ -51,6 +53,8 @@ def StartScan(targetip, port, threadNum):
     # 目标IP地址
     ip = targetip
     # 线程列表
+    # 增加随机重排扫描算法，从而使"基于通过连续端口被连接算法进行扫描判断"的方式失效
+    random.shuffle(portList)
     threads = []
     threadNumber = threadNum
     # 端口队列
@@ -62,6 +66,7 @@ def StartScan(targetip, port, threadNum):
         threads.append(PortScanner(portQueue, ip, timeout=3))
     # 启动线程
     for thread in threads:
+        time.sleep(0.01)
         thread.start()
     # 阻塞线程
     for thread in threads:
